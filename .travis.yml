@@ -3,8 +3,8 @@ python: "3.5"
 
 #install
 install:
-  pip install .
-  pip install tensorflow
+  - pip install .
+  - pip install tensorflow
 
 script:
-  start.py
+  - python start.py
