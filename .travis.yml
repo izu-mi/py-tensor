@@ -41,7 +41,6 @@ install:
   - pip install tensorflow==1.2.0
   - pip install nbformat nbconvert jupyter_client jupyter
   - pip install sklearn
-  - python setup.py install
 
 script:
   # Convert and preprocess Jupyter notebooks to Python files for PEP8.
