@@ -1,0 +1,8 @@
+# pylint
+.pylintrc
+
+#ipynb
+*.ipynb*
+
+#python
+/__pycache__
