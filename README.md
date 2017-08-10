@@ -1,4 +1,4 @@
-# Version 0.0.2 [![Build Status](https://travis-ci.org/izu-mi/py-tensor.svg?branch=master)](https://travis-ci.org/izu-mi/py-tensor)
+# Version 0.0.2 [![Build Status](https://travis-ci.org/izu-mi/py-tensor.svg?branch=dev)](https://travis-ci.org/izu-mi/py-tensor)
 ## Version 0.0.3 Changes: 
 - Clean up code
 - Docstrings
