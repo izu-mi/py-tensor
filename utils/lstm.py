@@ -2,6 +2,7 @@
 
 import time
 import warnings
+from six.moves import xrange
 import numpy as np
 from numpy import newaxis
 from keras.layers.core import Dense, Activation, Dropout
@@ -31,7 +32,7 @@ def load_data(filename, seq_len, normalise_window):
 
     sequence_length = seq_len + 1
     result = []
-    for index in range(len(data) - sequence_length):
+    for index in xrange(len(data) - sequence_length):
         result.append(data[index: index + sequence_length])
 
     if normalise_window:
@@ -108,7 +109,7 @@ def predict_sequence_full(model, data, window_size):
 def predict_sequences_multiple(model, data, window_size, prediction_len):
     # Predict sequence of 50 steps before shifting prediction run forward by 50 steps
     prediction_seqs = []
-    for i in xrange(len(data) / prediction_len):
+    for i in xrange(len(data) // prediction_len):
         curr_frame = data[i * prediction_len]
         predicted = []
         for j in xrange(prediction_len):

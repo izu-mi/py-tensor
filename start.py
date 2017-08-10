@@ -37,7 +37,7 @@ print("Compilation Time: ", time.time() - start)
 
 #Train the model
 model.fit(
-    X_train, 
+    X_train,
     y_train,
     batch_size=512,
     nb_epoch=1,
