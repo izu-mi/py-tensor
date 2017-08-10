@@ -41,6 +41,7 @@ install:
   - pip install tensorflow==1.2.0
   - pip install nbformat nbconvert jupyter_client jupyter
   - pip install sklearn
+  - pip install edward
 
 script:
   # Convert and preprocess Jupyter notebooks to Python files for PEP8.
@@ -49,8 +50,5 @@ script:
         jupyter nbconvert --template=tests/data/strip_markdown.tpl --to python --stdout $file | grep -v '^get_ipython' | sed '$d' > ${file%.*}.py;
       fi
     done;
-  - PYTHONPATH=$PWD:$PYTHONPATH pytest --cov=daedulus6 --pep8;
+  #- PYTHONPATH=$PWD:$PYTHONPATH pytest --cov=keras --pep8; 
   - python start.py
-
-after_success:
-  - coveralls
