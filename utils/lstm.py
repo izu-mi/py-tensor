@@ -17,14 +17,13 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
     fig = plt.figure(facecolor='white')
     ax = fig.add_subplot(111)
     ax.plot(true_data, label='True Data')
-    print('yo')
     # Pad the list of predictions to shift it in the graph to it's correct start
     for i, data in enumerate(predicted_data):
         padding = [None for p in xrange(i * prediction_len)]
         plt.plot(padding + data, label='Prediction')
         plt.legend()
-    plt.show()
-
+    plt.savefig('stock_predicton.png', bbox_inches='tight')
+    plt.close(fig)
 
 def load_data(filename, seq_len, normalise_window):
     f = open(filename, 'r').read()
