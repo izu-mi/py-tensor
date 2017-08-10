@@ -9,4 +9,4 @@
 *.pyc
 
 #vscode
-/.vscode
+*.vscode
