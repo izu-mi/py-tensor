@@ -5,6 +5,7 @@ import warnings
 from six.moves import xrange
 import numpy as np
 from numpy import newaxis
+import pandas as pd
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
@@ -12,6 +13,15 @@ import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
 
+#get stock data from url
+def get_stock_data(stock_name, normalized=0):
+    url = "http://www.google.com/finance/historical?q=" + stock_name + "&startdate=Jul+12%2C+2013&enddate=Jul+11%2C+2017&num=30&ei=rCtlWZGSFN3KsQHwrqWQCw&output=csv"
+    #url="http://www.google.com/finance/historical?q=%s&ei=u-lHWfGPNNWIsgHHqIqICw&output=csv" % stock_name
+    col_names = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
+    stocks = pd.read_csv(url, header=0, names=col_names)
+    df = pd.DataFrame(stocks)
+    df.drop(df.columns[[0, 3, 5]], axis=1, inplace=True)
+    return df   
 
 def plot_results_multiple(predicted_data, true_data, prediction_len):
     fig = plt.figure(facecolor='white')
@@ -25,30 +35,24 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
     plt.savefig('stock_predicton.png', bbox_inches='tight')
     plt.close(fig)
 
-def load_data(filename, seq_len, normalise_window):
-    f = open(filename, 'r').read()
-    data = f.split('\n')
-
+def load_data(stock, seq_len):
+    amount_of_features = len(stock.columns)
+    data = stock.as_matrix() #pd.DataFrame(stock)
     sequence_length = seq_len + 1
     result = []
-    for index in xrange(len(data) - sequence_length):
+    for index in range(len(data) - sequence_length):
         result.append(data[index: index + sequence_length])
 
-    if normalise_window:
-        result = normalise_windows(result)
-
     result = np.array(result)
-
     row = round(0.9 * result.shape[0])
     train = result[:int(row), :]
-    np.random.shuffle(train)
     x_train = train[:, :-1]
-    y_train = train[:, -1]
+    y_train = train[:, -1][:,-1]
     x_test = result[int(row):, :-1]
-    y_test = result[int(row):, -1]
+    y_test = result[int(row):, -1][:,-1]
 
-    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
-    x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], amount_of_features))
+    x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], amount_of_features))  
 
     return [x_train, y_train, x_test, y_test]
 
@@ -81,10 +85,21 @@ def build_model(layers):
     model.add(Activation("linear"))
 
     start = time.time()
-    model.compile(loss="mse", optimizer="rmsprop")
+    model.compile(loss="mse", optimizer="rmsprop", metrics=['accuracy'])
     print("Compilation Time : ", time.time() - start)
     return model
 
+def build_model2(layers):
+    d = 0.2
+    model = Sequential()
+    model.add(LSTM(128, input_shape=(layers[1], layers[0]), return_sequences=True))
+    model.add(Dropout(d))
+    model.add(LSTM(64, input_shape=(layers[1], layers[0]), return_sequences=True))
+    model.add(Dropout(d))
+    model.add(Dense(16, init='uniform', activation='relu'))
+    model.add(Dense(1, init='uniform', activation='relu'))
+    model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+    return model
 
 def predict_point_by_point(model, data):
     # Predict each timestep given the last sequence of true data, in effect only predicting 1 step ahead each time
