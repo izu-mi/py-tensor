@@ -2,14 +2,29 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # imports
-from keras.layers.core import Dense, Activation, Dropout
-from keras.layers.recurrent import LSTM
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from pandas import datetime
+import math, time
+import itertools
+from sklearn import preprocessing
+import datetime
+from operator import itemgetter
+from sklearn.metrics import mean_squared_error
+from math import sqrt
 from keras.models import Sequential
+from keras.layers.core import Dense, Dropout, Activation
+from keras.layers.recurrent import LSTM
 from utils import lstm
-import time
+
+# strings
+data_sp = 'sp500.csv'
+data_googl = 'googl.csv'
 
 #Load data
-X_train, y_train, X_test, y_test = lstm.load_data('sp500.csv', 50, True)
+X_train, y_train, X_test, y_test = lstm.load_data(data_sp, 50, True)
+
 #Build model
 model = Sequential()
 
