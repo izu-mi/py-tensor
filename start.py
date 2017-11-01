@@ -57,7 +57,7 @@ print('Train Score: %.2f MSE (%.2f RMSE)' % (trainScore[0], math.sqrt(trainScore
 testScore = model.evaluate(X_test, y_test, verbose=0)
 print('Test Score: %.2f MSE (%.2f RMSE)' % (testScore[0], math.sqrt(testScore[0])))
 
-# print(X_test[-1])
+print(X_test[-1])
 diff=[]
 ratio=[]
 p = model.predict(X_test)
@@ -65,10 +65,7 @@ for u in range(len(y_test)):
     pr = p[u][0]
     ratio.append((y_test[u]/pr)-1)
     diff.append(abs(y_test[u]- pr))
-    #print(u, y_test[u], pr, (y_test[u]/pr)-1, abs(y_test[u]- pr))
+    print(u, y_test[u], pr, (y_test[u]/pr)-1, abs(y_test[u]- pr))
 
 #Plot predictions
-plt.plot(p, color='red', label='prediction')
-plt.plot(y_test, color='blue', label='y_test')
-plt.legend(loc='upper left')
-plt.show()
+lstm.plot2(p , y_test)
